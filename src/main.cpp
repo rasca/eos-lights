@@ -1,10 +1,6 @@
-
-#include <list>
-#include <FastLED.h>
-
-#define NUM_LEDS 50
-
-CRGB leds[NUM_LEDS];
+#include <config.h>
+#include <wave.h>
+#include <upper_fill.h>
 
 void setupMan() {
   // Setup Segments
@@ -23,66 +19,6 @@ void setup()
   setupMan();
   FastLED.setBrightness(30);
   Serial.begin(9600);
-}
-
-#define FRAME_TIME_MIN 10
-#define FRAME_TIME_MAX 40
-int frame_time = 30;
-int velocity_direction = -1;
-
-int pos = 0, hue = 0;
-
-#define TAIL_NUM 25
-
-int wrap(int pre) {
-  if (pre < 0) {
-    pre = pre + NUM_LEDS;
-  } else if (pre > NUM_LEDS) {
-    pre = pre - NUM_LEDS;
-  }
-  return pre;
-}
-
-void wave() {
-  hue++;
-  pos = (pos + 1) % NUM_LEDS;
-
-  FastLED.clear();
-  leds[pos] = CHSV(hue, 255, 255);
-
-  for (int i = 1 ; i < TAIL_NUM; i++)
-  {
-
-    leds[wrap(pos-i)].r = leds[pos].r * pow(.75, i);
-    leds[wrap(pos-i)].g = leds[pos].g * pow(.75, i);
-    leds[wrap(pos-i)].b = leds[pos].b * pow(.75, i);
-
-    leds[wrap(pos+i)].r = leds[pos].r * pow(.75, i);
-    leds[wrap(pos+i)].g = leds[pos].g * pow(.75, i);
-    leds[wrap(pos+i)].b = leds[pos].b * pow(.75, i);
-  }
-  Serial.println(pos);
-
-  FastLED.show();
-  frame_time = frame_time + velocity_direction;
-  if (frame_time == FRAME_TIME_MAX || frame_time == FRAME_TIME_MIN) {
-    velocity_direction = velocity_direction * -1;
-  }
-  delay(frame_time);
-}
-
-void upper_fill() {
-  pos = (pos + 1) % NUM_LEDS;
-  if (pos == 0) {
-    FastLED.clear();
-    hue = hue + 30;
-  }
-
-  leds[pos] = CHSV(hue, 255, 255);
-
-  FastLED.show();
-
-  delay(frame_time);
 }
 
 unsigned long current_time = 0;
