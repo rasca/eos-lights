@@ -21,7 +21,7 @@ void setupMan() {
 void setup()
 {
   setupMan();
-  FastLED.setBrightness(255);
+  FastLED.setBrightness(30);
   Serial.begin(9600);
 }
 
@@ -43,9 +43,7 @@ int wrap(int pre) {
   return pre;
 }
 
-void loop()
-{
-
+void wave() {
   hue++;
   pos = (pos + 1) % NUM_LEDS;
 
@@ -71,4 +69,39 @@ void loop()
     velocity_direction = velocity_direction * -1;
   }
   delay(frame_time);
+}
+
+void upper_fill() {
+  pos = (pos + 1) % NUM_LEDS;
+  if (pos == 0) {
+    FastLED.clear();
+    hue = hue + 30;
+  }
+
+  leds[pos] = CHSV(hue, 255, 255);
+
+  FastLED.show();
+
+  delay(frame_time);
+}
+
+unsigned long current_time = 0;
+int programs_current = 0;
+int programs_total = 2;
+
+void loop()
+{
+  if (millis() > current_time + 10000) {
+    current_time = millis();
+    programs_current = (programs_current + 1) % programs_total;
+  }
+
+  switch(programs_current) {
+    case 0:
+      wave();
+      break;
+    case 1:
+      upper_fill();
+      break;
+  }
 }
