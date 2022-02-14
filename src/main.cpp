@@ -17,7 +17,7 @@ void setupMan() {
 void setup()
 {
   setupMan();
-  FastLED.setBrightness(30);
+  FastLED.setBrightness(255);
   Serial.begin(9600);
 }
 
@@ -25,19 +25,30 @@ unsigned long current_time = 0;
 int programs_current = 0;
 int programs_total = 2;
 
+UpperFill up(20);
+Wave wave(5);
+
+Effect& getCurrentEffect() {
+  switch(programs_current) {
+    case 0:
+      return wave;
+      break;
+    case 1:
+      return up;
+      break;
+  }
+}
+
 void loop()
 {
   if (millis() > current_time + 10000) {
     current_time = millis();
     programs_current = (programs_current + 1) % programs_total;
   }
+    Effect& currentEffect = getCurrentEffect();
 
-  switch(programs_current) {
-    case 0:
-      wave();
-      break;
-    case 1:
-      upper_fill();
-      break;
-  }
+    currentEffect.tick();
+
+    FastLED.show();
+    delay(30);
 }

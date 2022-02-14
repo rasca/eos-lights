@@ -3,6 +3,12 @@
 
 #include<config.h>
 
+class Effect {
+    public:
+        virtual void setup() = 0;
+        virtual void tick() = 0;
+};
+
 
 int wrap(int pre) {
   if (pre < 0) {
