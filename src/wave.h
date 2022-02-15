@@ -11,7 +11,7 @@ public:
   int hue = 0;
   int tail_num = 25;
 
-  Wave(CRGB (&leds)[NUM_LEDS], int tail_num) : Effect(leds), pos(tail_num), tail_num(tail_num) {}
+  Wave(std::array<CRGB, NUM_LEDS> &leds, int tail_num) : Effect(leds), pos(tail_num), tail_num(tail_num) {}
 
   void tick()
   {

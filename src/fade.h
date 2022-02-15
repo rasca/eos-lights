@@ -11,7 +11,7 @@ class Fade : public Effect {
         int totalSteps = 10;
         float scaleFactor = 0.7;
 
-        Fade(CRGB (&leds)[NUM_LEDS]) : Effect(leds) {}
+        Fade(std::array<CRGB, NUM_LEDS> &leds) : Effect(leds) {}
 
         void tick() {
             if (step == totalSteps - 1) {

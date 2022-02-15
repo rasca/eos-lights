@@ -19,11 +19,11 @@ public:
     Fade fade;
     const int total_effects = 5;
 
-    GrowFadeEffect(CRGB (&arm1)[NUM_LEDS],
-                   CRGB (&arm2)[NUM_LEDS],
-                   CRGB (&arm3)[NUM_LEDS],
-                   CRGB (&arm4)[NUM_LEDS],
-                   CRGB (&head)[NUM_LEDS]) : arm1(arm1),
+    GrowFadeEffect(std::array<CRGB, NUM_LEDS> &arm1,
+                   std::array<CRGB, NUM_LEDS> &arm2,
+                   std::array<CRGB, NUM_LEDS> &arm3,
+                   std::array<CRGB, NUM_LEDS> &arm4,
+                   std::array<CRGB, NUM_LEDS> &head) : arm1(arm1),
                                              arm2(arm2),
                                              arm3(arm3),
                                              arm4(arm4),
@@ -85,26 +85,21 @@ public:
 class WaveEffect : public BaseEffect
 {
 public:
-    CRGB (&arm1)
-    [NUM_LEDS];
-    CRGB (&arm2)
-    [NUM_LEDS];
-    CRGB (&arm3)
-    [NUM_LEDS];
-    CRGB (&arm4)
-    [NUM_LEDS];
-    CRGB (&head)
-    [NUM_LEDS];
+    std::array<CRGB, NUM_LEDS> &arm1;
+    std::array<CRGB, NUM_LEDS> &arm2;
+    std::array<CRGB, NUM_LEDS> &arm3;
+    std::array<CRGB, NUM_LEDS> &arm4;
+    std::array<CRGB, NUM_LEDS> &head;
     Wave wave;
 
     int waveTotal = 3;
     int currentWave = 0;
 
-    WaveEffect(CRGB (&arm1)[NUM_LEDS],
-               CRGB (&arm2)[NUM_LEDS],
-               CRGB (&arm3)[NUM_LEDS],
-               CRGB (&arm4)[NUM_LEDS],
-               CRGB (&head)[NUM_LEDS]) : arm1(arm1),
+        WaveEffect(std::array<CRGB, NUM_LEDS>&arm1,
+               std::array<CRGB, NUM_LEDS>&arm2,
+               std::array<CRGB, NUM_LEDS>&arm3,
+               std::array<CRGB, NUM_LEDS>&arm4,
+               std::array<CRGB, NUM_LEDS>&head) : arm1(arm1),
                                          arm2(arm2),
                                          arm3(arm3),
                                          arm4(arm4),
@@ -141,11 +136,11 @@ class ManEffect : public BaseEffect
 {
 
 public:
-    CRGB leds_arm_1[NUM_LEDS];
-    CRGB leds_arm_2[NUM_LEDS];
-    CRGB leds_arm_3[NUM_LEDS];
-    CRGB leds_arm_4[NUM_LEDS];
-    CRGB leds_head[NUM_LEDS];
+    std::array<CRGB, NUM_LEDS> leds_arm_1;
+    std::array<CRGB, NUM_LEDS> leds_arm_2;
+    std::array<CRGB, NUM_LEDS> leds_arm_3;
+    std::array<CRGB, NUM_LEDS> leds_arm_4;
+    std::array<CRGB, NUM_LEDS> leds_head;
 
     GrowFadeEffect effect1;
     WaveEffect effect2;
@@ -161,13 +156,13 @@ public:
     {
         // Setup Segments
         // 4 legs/arms
-        FastLED.addLeds<WS2812B, GPIO_NUM_16>(leds_arm_1, NUM_LEDS);
-        FastLED.addLeds<WS2812B, GPIO_NUM_4>(leds_arm_2, NUM_LEDS);
-        FastLED.addLeds<WS2812B, GPIO_NUM_0>(leds_arm_3, NUM_LEDS);
-        FastLED.addLeds<WS2812B, GPIO_NUM_2>(leds_arm_4, NUM_LEDS);
+        FastLED.addLeds<WS2812B, GPIO_NUM_16>(leds_arm_1.data(), NUM_LEDS);
+        FastLED.addLeds<WS2812B, GPIO_NUM_4>(leds_arm_2.data(), NUM_LEDS);
+        FastLED.addLeds<WS2812B, GPIO_NUM_0>(leds_arm_3.data(), NUM_LEDS);
+        FastLED.addLeds<WS2812B, GPIO_NUM_2>(leds_arm_4.data(), NUM_LEDS);
 
         // 1 head
-        FastLED.addLeds<WS2812B, GPIO_NUM_15>(leds_head, NUM_LEDS);
+        FastLED.addLeds<WS2812B, GPIO_NUM_15>(leds_head.data(), NUM_LEDS);
 
         effect1.setup();
         effect2.setup();

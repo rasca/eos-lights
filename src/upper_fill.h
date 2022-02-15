@@ -12,8 +12,8 @@ public:
     int hue = 0;
     int hue_variation = 30;
 
-    UpperFill(CRGB (&leds)[NUM_LEDS]) : Effect(leds) {}
-    UpperFill(CRGB (&leds)[NUM_LEDS], int hue_variation) : Effect(leds), hue_variation(hue_variation) {}
+    UpperFill(std::array<CRGB, NUM_LEDS> &leds) : Effect(leds) {}
+    UpperFill(std::array<CRGB, NUM_LEDS> &leds, int hue_variation) : Effect(leds), hue_variation(hue_variation) {}
 
     void tick()
     {

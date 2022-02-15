@@ -26,8 +26,8 @@ public:
 
 class Effect : public BaseEffect {
     public:
-        CRGB (&leds)[NUM_LEDS];
-        Effect(CRGB (&leds)[NUM_LEDS]) : leds(leds) {}
+        std::array<CRGB, NUM_LEDS> &leds;
+        Effect(std::array<CRGB, NUM_LEDS> &leds) : leds(leds) {}
 };
 
 int wrap(int pre) {
@@ -39,7 +39,7 @@ int wrap(int pre) {
   return pre;
 }
 
-void copyLeds(CRGB (&from)[NUM_LEDS], CRGB (&to)[NUM_LEDS]) {
+void copyLeds(std::array<CRGB, NUM_LEDS> &from, std::array<CRGB, NUM_LEDS> &to) {
   std::copy(std::begin(from), std::end(from), std::begin(to));
 }
 
