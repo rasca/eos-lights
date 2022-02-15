@@ -11,19 +11,11 @@ public:
   int hue = 0;
   int tail_num = 25;
 
-  Wave(int new_tail_num) : tail_num(new_tail_num) {}
-
-  void setup()
-  {
-  }
+  Wave(CRGB (&leds)[NUM_LEDS], int tail_num) : Effect(leds), pos(tail_num), tail_num(tail_num) {}
 
   void tick()
   {
 
-    hue++;
-    pos = (pos + 1) % NUM_LEDS;
-
-    FastLED.clear();
     leds[pos] = CHSV(hue, 255, 255);
 
     for (int i = 1; i < tail_num; i++)
@@ -36,6 +28,14 @@ public:
       leds[wrap(pos + i)].r = leds[pos].r * pow(.75, i);
       leds[wrap(pos + i)].g = leds[pos].g * pow(.75, i);
       leds[wrap(pos + i)].b = leds[pos].b * pow(.75, i);
+    }
+    leds[wrap(pos - tail_num - 1)] = CRGB::Black;
+
+    hue++;
+    pos = (pos + 1) % NUM_LEDS;
+    if (pos == tail_num)
+    {
+      end();
     }
   }
 };
