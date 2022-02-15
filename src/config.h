@@ -2,6 +2,7 @@
 #define CONFIG_H_INCLUDED
 
 #define NUM_LEDS 50
+#define NUM_SEGMENTS 5
 
 #include <FastLED.h>
 #include <array>
