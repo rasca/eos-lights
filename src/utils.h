@@ -14,10 +14,8 @@ public:
   void restart() {};
   void end()
   {
-    Serial.println("base effect end");
     if (endFunction)
     {
-      Serial.println("calling endFunction");
       endFunction();
     }
   }

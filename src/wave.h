@@ -7,14 +7,27 @@
 class Wave : public Effect
 {
 public:
-  int pos = 0;
   int hue = 0;
   int tail_num = 25;
 
-  Wave(std::array<CRGB, NUM_LEDS> &leds, int tail_num) : Effect(leds), pos(tail_num), tail_num(tail_num) {}
+  unsigned long startTime = 0;
+  int duration = 1000;
+
+  Wave(std::array<CRGB, NUM_LEDS> &leds, int tail_num) : Effect(leds), tail_num(tail_num) {}
+
+  void setup()
+  {
+    startTime = millis();
+  }
+
+  void restart()
+  {
+    startTime = millis();
+  }
 
   void tick()
   {
+    int pos = std::min((int)(millis() - startTime) * NUM_LEDS / duration, NUM_LEDS);
 
     leds[pos] = CHSV(hue, 255, 255);
 
@@ -32,9 +45,9 @@ public:
     leds[wrap(pos - tail_num - 1)] = CRGB::Black;
 
     hue++;
-    pos = (pos + 1) % NUM_LEDS;
-    if (pos == tail_num)
+    if (pos == NUM_LEDS)
     {
+      startTime = millis();
       end();
     }
   }

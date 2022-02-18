@@ -6,6 +6,8 @@
 #include <fade.h>
 #include <upper_fill.h>
 #include <wave.h>
+#include <composers.h>
+#include <stars.h>
 
 class GrowFadeEffect : public BaseEffect
 {
@@ -25,7 +27,7 @@ public:
         arm3(segments[2]),
         arm4(segments[3]),
         head(segments[4], 15),
-        fade(segments[1]) {}
+        fade(segments[0]) {}
     int step = 0;
 
     void setup()
@@ -39,12 +41,29 @@ public:
 
     void restart() {
         FastLED.clear();
+            arm1.restart();
     }
 
     void nextStep()
     {
-        Serial.println("man end");
         step = (step + 1) % total_effects;
+        switch (step)
+        {
+        case 0:
+            arm1.restart();
+            break;
+        case 1:
+            arm2.restart();
+        case 2:
+            arm3.restart();
+            break;
+        case 3:
+            arm4.restart();
+            break;
+        case 4:
+            fade.restart();
+            break;
+        }
         if (step == 0)
         {
             end();
@@ -126,28 +145,33 @@ public:
 
     GrowFadeEffect effect1;
     WaveEffect effect2;
+    // Stars stars;
+
+    ApplyToAll<Stars, int> stars;
 
     int currentProgram = 0;
     int programsCount = 2;
     unsigned long currentTime = 0;
 
     ManEffect() : effect1(segments),
-                  effect2(segments) {}
+                  effect2(segments),
+                  stars(segments, 10) {}
 
     void setup()
     {
         // Setup Segments
         // 4 legs/arms
-        FastLED.addLeds<WS2812B, GPIO_NUM_16>(segments[0].data(), NUM_LEDS);
-        FastLED.addLeds<WS2812B, GPIO_NUM_4>(segments[1].data(), NUM_LEDS);
-        FastLED.addLeds<WS2812B, GPIO_NUM_0>(segments[2].data(), NUM_LEDS);
-        FastLED.addLeds<WS2812B, GPIO_NUM_2>(segments[3].data(), NUM_LEDS);
+        FastLED.addLeds<WS2812B, GPIO_NUM_18>(segments[0].data(), NUM_LEDS);
+        FastLED.addLeds<WS2812B, GPIO_NUM_5>(segments[1].data(), NUM_LEDS);
+        FastLED.addLeds<WS2812B, GPIO_NUM_17>(segments[2].data(), NUM_LEDS);
+        FastLED.addLeds<WS2812B, GPIO_NUM_16>(segments[3].data(), NUM_LEDS);
 
         // 1 head
-        FastLED.addLeds<WS2812B, GPIO_NUM_15>(segments[4].data(), NUM_LEDS);
+        FastLED.addLeds<WS2812B, GPIO_NUM_4>(segments[4].data(), NUM_LEDS);
 
         effect1.setup();
         effect2.setup();
+        stars.setup();
         effect1.endFunction = std::bind(&ManEffect::nextStep, this);
         effect2.endFunction = std::bind(&ManEffect::nextStep, this);
     }
@@ -169,6 +193,8 @@ public:
 
     void tick()
     {
+        stars.tick();
+        return;
         switch (currentProgram)
         {
         case 0:

@@ -9,16 +9,16 @@ ManEffect manEffect;
 
 void setup()
 {
+
+  Serial.begin(115200);
+  Serial.println("Made with <3 by rasca");
   manEffect.setup();
   FastLED.setBrightness(255);
-  Serial.begin(115200);
 }
 
 void loop()
 {
     manEffect.tick();
-    Serial.println("main tick");
 
     FastLED.show();
-    delay(30);
 }
