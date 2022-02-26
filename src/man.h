@@ -8,6 +8,7 @@
 #include <wave.h>
 #include <composers.h>
 #include <stars.h>
+#include <beat.h>
 
 class GrowFadeEffect : public BaseEffect
 {
@@ -147,6 +148,7 @@ public:
     WaveEffect effect2;
     // Stars stars;
 
+    ApplyToAll<Beat, int> beat;
     ApplyToAll<Stars, int> stars;
 
     int currentProgram = 0;
@@ -155,16 +157,28 @@ public:
 
     ManEffect() : effect1(segments),
                   effect2(segments),
+                  beat(segments, 10),
                   stars(segments, 10) {}
 
     void setup()
     {
         // Setup Segments
         // 4 legs/arms
+        /*
         FastLED.addLeds<WS2812B, GPIO_NUM_18>(segments[0].data(), NUM_LEDS);
         FastLED.addLeds<WS2812B, GPIO_NUM_5>(segments[1].data(), NUM_LEDS);
         FastLED.addLeds<WS2812B, GPIO_NUM_17>(segments[2].data(), NUM_LEDS);
         FastLED.addLeds<WS2812B, GPIO_NUM_16>(segments[3].data(), NUM_LEDS);
+        */
+        FastLED.addLeds<WS2812, GPIO_NUM_15>(segments[0].data(), NUM_LEDS);
+        FastLED.addLeds<WS2812, GPIO_NUM_2> (segments[0].data(), NUM_LEDS);
+        FastLED.addLeds<WS2812, GPIO_NUM_0> (segments[0].data(), NUM_LEDS);
+        FastLED.addLeds<WS2812, GPIO_NUM_4> (segments[0].data(), NUM_LEDS);
+        FastLED.addLeds<WS2812, GPIO_NUM_16>(segments[0].data(), NUM_LEDS);
+        FastLED.addLeds<WS2812, GPIO_NUM_17>(segments[0].data(), NUM_LEDS);
+        FastLED.addLeds<WS2812, GPIO_NUM_5> (segments[0].data(), NUM_LEDS);
+        FastLED.addLeds<WS2812, GPIO_NUM_18>(segments[0].data(), NUM_LEDS);
+        FastLED.addLeds<WS2812, GPIO_NUM_19>(segments[0].data(), NUM_LEDS);
 
         // 1 head
         FastLED.addLeds<WS2812B, GPIO_NUM_4>(segments[4].data(), NUM_LEDS);
@@ -172,6 +186,7 @@ public:
         effect1.setup();
         effect2.setup();
         stars.setup();
+        beat.setup();
         effect1.endFunction = std::bind(&ManEffect::nextStep, this);
         effect2.endFunction = std::bind(&ManEffect::nextStep, this);
     }
@@ -193,12 +208,12 @@ public:
 
     void tick()
     {
-        stars.tick();
-        return;
+        // beat.tick();
+        // return;
         switch (currentProgram)
         {
         case 0:
-            return effect1.tick();
+            return effect2.tick();
             break;
         case 1:
             return effect2.tick();

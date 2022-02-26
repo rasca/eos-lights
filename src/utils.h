@@ -6,6 +6,10 @@
 #include <iterator>
 #include <functional>
 
+int clamp(int x, int upper, int lower)
+{
+    return min(upper, max(x, lower));
+}
 
 class BaseEffect {
 public:

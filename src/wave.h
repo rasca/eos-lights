@@ -7,11 +7,11 @@
 class Wave : public Effect
 {
 public:
-  int hue = 0;
+  float hue = 0;
   int tail_num = 25;
 
   unsigned long startTime = 0;
-  int duration = 1000;
+  int duration = 5000;
 
   Wave(std::array<CRGB, NUM_LEDS> &leds, int tail_num) : Effect(leds), tail_num(tail_num) {}
 
@@ -29,7 +29,7 @@ public:
   {
     int pos = std::min((int)(millis() - startTime) * NUM_LEDS / duration, NUM_LEDS);
 
-    leds[pos] = CHSV(hue, 255, 255);
+    leds[pos] = CHSV((int)hue, 255, 255);
 
     for (int i = 1; i < tail_num; i++)
     {
@@ -44,7 +44,7 @@ public:
     }
     leds[wrap(pos - tail_num - 1)] = CRGB::Black;
 
-    hue++;
+    hue += 0.05;
     if (pos == NUM_LEDS)
     {
       startTime = millis();

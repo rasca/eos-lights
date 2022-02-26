@@ -7,6 +7,8 @@
 #include <config.h>
 #include <utils.h>
 
+using namespace std;
+
 class Star {
     public:
     int position;
@@ -22,7 +24,7 @@ class Star {
     void setup() {
         startTime = millis();
         position = random16(0, NUM_LEDS);
-        brightness = random16(0, 10);
+        brightness = random16(0, 20);
         hue = random16(0, 255);
         duration = random16(0, 255);
     }
@@ -32,8 +34,9 @@ class Star {
     }
 
     CRGB tick() {
-        int rnd = random16(0, 255);
-        return CHSV(hue, 20, 10);
+        int rnd = random16(0, 10);
+        return CHSV(hue, 20, 20);
+        return CHSV(hue, 20, clamp(brightness + random16(0, 10) - 5, 0, 255));
         switch (rnd) {
             // int starS = random8(0, 20) - 10 + 
             case 0 ... 3:
