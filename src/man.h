@@ -208,8 +208,8 @@ public:
 
     void tick()
     {
-        // beat.tick();
-        // return;
+        beat.tick();
+        return;
         switch (currentProgram)
         {
         case 0:

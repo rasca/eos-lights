@@ -26,13 +26,15 @@ public:
 
   void tick()
   {
-    int intensity = sin8((millis() - startTime) / 1);
+    int intensity = sin8(millis() / 25);
+    if (intensity == 1)
+    {
+      hue += 20;
+    }
 
     for (int i = 1; i < NUM_LEDS; i++)
     {
-      leds[i].g = intensity;
-      // leds[i].g = leds[pos].g * pow(.75, i);
-      // leds[i].b = leds[pos].b * pow(.75, i);
+      leds[i] = CHSV(hue % 255, 255, intensity);
     }
 
     if (millis() - startTime > duration)
